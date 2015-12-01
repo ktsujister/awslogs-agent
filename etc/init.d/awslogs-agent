@@ -1,0 +1,33 @@
+#!/bin/bash
+# /etc/init.d/awslogs-agent
+
+touch /var/lock/awslogs-agent
+VAR_AWS="/var/aws"
+AWSLOGS_CONFIG_FILE=$VAR_AWS/awslogs-config
+SCRIPT_SPOT="/tmp/awslogs-agent-setup.py"
+
+
+case "$1" in
+    start)
+	echo "Installing AWS logs agent" >> /var/lock/awslogs-agent
+	wget -O $SCRIPT_SPOT https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py >> /var/lock/awslogs-agent
+	chmod +x $SCRIPT_SPOT >> /var/lock/awslogs-agent
+	AWS_AZ=`cat /var/aws/region`
+	echo "AWS AZ is '$AWS_AZ'" >> /var/lock/awslogs-agent
+	# printf "File '$AWSLOGS_CONFIG_FILE' follows;\n" >> /var/lock/awslogs-agent
+	# cat $AWSLOGS_CONFIG_FILE >> /var/lock/awslogs-agent
+	# printf "\n;;" >> /var/lock/awslogs-agent
+	((exec $SCRIPT_SPOT -n -r $AWS_AZ -c $AWSLOGS_CONFIG_FILE >> /var/lock/awslogs-agent 2>&1) &)
+	echo "AWS logs agent installation completed" >> /var/lock/awslogs-agent
+    ;;
+    stop)
+	echo "awslogs-agent doesn't do anything on stop currently"
+    ;;
+    *)
+	echo "Usage: /etc/init.d/awslogs-agent {start|stop}"
+	exit 1
+    ;;
+esac
+
+exit 0
+
