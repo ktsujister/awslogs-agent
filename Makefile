@@ -1,2 +1,2 @@
 all:
-	dpkg-deb --build awslogs-agent
+	dpkg-deb --build awslogs-agent .
