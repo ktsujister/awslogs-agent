@@ -1,9 +1,9 @@
 Package: awslogs-agent
-Version: 1.0-1
+Version: 1.0-2
 Section: base
 Priority: optional
 Architecture: all
-Depends: var-aws (>= 1.0), wget (>= 1.12.0), sysv-rc (>= 2.86)
+Depends: var-aws (>= 1.0), wget (>= 1.12.0), sysv-rc (>= 2.86), python-minimal
 Maintainer: Alan Busby <abusby@gracenote.com>
 Description: awslogs-agent
  Installs and configures AWS's awslogs-agent on each boot
